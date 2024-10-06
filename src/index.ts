@@ -11,8 +11,8 @@ Bun.serve({
     const redirectUri = isProduction ? `${Bun.env.HOST}/callback` : "http://localhost:3000/callback";
     const scope = "https://www.googleapis.com/auth/calendar.readonly";
 
-    if (pathname === "/schema") {
-      const schema = Bun.file(import.meta.dir + "/schema.json");
+    if (pathname === "/schema/v1") {
+      const schema = Bun.file(import.meta.dir + "/schemas/v1.json");
       return new Response(await schema.text(), { headers: { "Content-Type": "application/json" } });
     }
 
