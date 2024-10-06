@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SmartClock Config Schema",
+  "type": "object",
+  "properties": {
+    "resolution": {
+      "type": "string"
+    },
+    "alexa": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "devices": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["enabled", "userId", "token", "devices"]
+    },
+    "clock": {
+      "type": "object",
+      "properties": {
+        "mainSize": {
+          "type": "number"
+        },
+        "smallSize": {
+          "type": "number"
+        },
+        "dateSize": {
+          "type": "number"
+        }
+      },
+      "required": ["mainSize", "smallSize", "dateSize"]
+    },
+    "calendar": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientSecret": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        },
+        "monthTitleSize": {
+          "type": "number"
+        },
+        "eventTitleSize": {
+          "type": "number"
+        },
+        "eventTimeSize": {
+          "type": "number"
+        },
+        "eventColorSize": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "enabled",
+        "clientId",
+        "clientSecret",
+        "accessToken",
+        "refreshToken",
+        "monthTitleSize",
+        "eventTitleSize",
+        "eventTimeSize",
+        "eventColorSize"
+      ]
+    },
+    "sidebar": {
+      "type": "object",
+      "properties": {
+        "padding": {
+          "type": "number"
+        }
+      },
+      "required": ["padding"]
+    },
+    "weather": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "units": {
+          "type": "string"
+        }
+      },
+      "required": ["enabled", "apiKey", "postcode", "country", "units"]
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "clock": {
+          "type": "string"
+        },
+        "sidebar": {
+          "type": "string"
+        },
+        "weather": {
+          "type": "string"
+        }
+      },
+      "required": ["clock", "sidebar", "weather"]
+    }
+  },
+  "required": ["resolution", "alexa", "clock", "calendar", "sidebar", "weather", "dimensions"]
+}

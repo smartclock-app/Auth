@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
+    "dev": "bun run src/index.ts --watch",
     "deploy": "caprover deploy -d"
   },
   "devDependencies": {
