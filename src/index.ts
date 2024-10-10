@@ -11,16 +11,6 @@ Bun.serve({
     const redirectUri = isProduction ? `${Bun.env.HOST}/callback` : "http://localhost:3000/callback";
     const scope = "https://www.googleapis.com/auth/calendar.readonly";
 
-    if (pathname === "/schema/v1") {
-      const schema = Bun.file(import.meta.dir + "/schemas/v1.json");
-      return new Response(await schema.text(), { headers: { "Content-Type": "application/json" } });
-    }
-
-    if (pathname === "/schema/v2") {
-      const schema = Bun.file(import.meta.dir + "/schemas/v2.json");
-      return new Response(await schema.text(), { headers: { "Content-Type": "application/json" } });
-    }
-
     if (pathname === "/google") {
       const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline`;
 
