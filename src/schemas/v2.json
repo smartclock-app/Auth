@@ -1,10 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "SmartClock Config Schema v1",
+  "title": "SmartClock Config Schema v2",
   "type": "object",
   "properties": {
+    "$schema": {
+      "const": "https://auth.smartclock.app/schema/v2"
+    },
     "resolution": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^[0-9]+x[0-9]+$"
     },
     "alexa": {
       "type": "object",
@@ -25,6 +29,7 @@
           }
         }
       },
+      "additionalProperties": false,
       "required": ["enabled", "userId", "token", "devices"]
     },
     "clock": {
@@ -40,6 +45,7 @@
           "type": "number"
         }
       },
+      "additionalProperties": false,
       "required": ["mainSize", "smallSize", "dateSize"]
     },
     "calendar": {
@@ -60,6 +66,9 @@
         "refreshToken": {
           "type": "string"
         },
+        "maxEvents": {
+          "type": "number"
+        },
         "monthTitleSize": {
           "type": "number"
         },
@@ -73,12 +82,14 @@
           "type": "number"
         }
       },
+      "additionalProperties": false,
       "required": [
         "enabled",
         "clientId",
         "clientSecret",
         "accessToken",
         "refreshToken",
+        "maxEvents",
         "monthTitleSize",
         "eventTitleSize",
         "eventTimeSize",
@@ -88,11 +99,15 @@
     "sidebar": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
         "padding": {
           "type": "number"
         }
       },
-      "required": ["padding"]
+      "additionalProperties": false,
+      "required": ["enabled", "padding"]
     },
     "weather": {
       "type": "object",
@@ -104,32 +119,41 @@
           "type": "string"
         },
         "postcode": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^$|([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\\s?[0-9][A-Za-z]{2})"
         },
         "country": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^$|^[A-Z]{2}$"
         },
         "units": {
-          "type": "string"
+          "type": "string",
+          "enum": ["metric", "imperial"]
         }
       },
+      "additionalProperties": false,
       "required": ["enabled", "apiKey", "postcode", "country", "units"]
     },
     "dimensions": {
       "type": "object",
       "properties": {
         "clock": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^[0-9]+,[0-9]+,[0-9]+,[0-9]+$"
         },
         "sidebar": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^[0-9]+,[0-9]+,[0-9]+,[0-9]+$"
         },
         "weather": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^[0-9]+,[0-9]+,[0-9]+,[0-9]+$"
         }
       },
+      "additionalProperties": false,
       "required": ["clock", "sidebar", "weather"]
     }
   },
+  "additionalProperties": false,
   "required": ["resolution", "alexa", "clock", "calendar", "sidebar", "weather", "dimensions"]
 }
