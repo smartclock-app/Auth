@@ -8,16 +8,48 @@ Bun.serve({
   async fetch(request) {
     const url = new URL(request.url);
     const pathname = url.pathname;
-    const redirectUri = isProduction ? `${Bun.env.HOST}/callback` : "http://localhost:3000/callback";
-    const scope = "https://www.googleapis.com/auth/calendar.readonly";
 
-    if (pathname === "/google") {
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline`;
+    if (pathname === "/trakt") {
+      const redirectUri = `${Bun.env.HOST}/trakt/callback`;
+      const authUrl = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${Bun.env.TRAKT_CLIENT_ID}&redirect_uri=${redirectUri}`;
 
       return Response.redirect(authUrl, 302);
     }
 
-    if (pathname === "/callback") {
+    if (pathname === "/trakt/callback") {
+      const redirectUri = `${Bun.env.HOST}/trakt/callback`;
+      const body = {
+        code: new URL(request.url).searchParams.get("code"),
+        client_id: Bun.env.TRAKT_CLIENT_ID,
+        client_secret: Bun.env.TRAKT_CLIENT_SECRET,
+        redirect_uri: redirectUri,
+        grant_type: "authorization_code",
+      };
+
+      const response = await fetch("https://api.trakt.tv/oauth/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const tokens = (await response.json()) as any;
+
+      return new Response(JSON.stringify({ tokens }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (pathname === "/google") {
+      const redirectUri = `${Bun.env.HOST}/google/callback`;
+      const scope = "https://www.googleapis.com/auth/calendar.readonly";
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${Bun.env.GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline`;
+
+      return Response.redirect(authUrl, 302);
+    }
+
+    if (pathname === "/google/callback") {
+      const redirectUri = `${Bun.env.HOST}/google/callback`;
       const code = new URL(request.url).searchParams.get("code");
 
       const client = new OAuth2Client({

@@ -1,6 +1,6 @@
 # Auth
 
-This repository contains the authentication module for the SmartClock project. It handles user registration, login, and authentication processes.
+This repository contains an example authentication server for SmartClock. It handles OAuth flows for both Google & Trakt.
 
 ## Installation
 
@@ -36,15 +36,14 @@ bun start
 ## API Endpoints
 
 - `GET /google` - Initiates Google OAuth.
-- `GET /callback` - Callback endpoint for Google OAuth.
+- `GET /google/callback` - Callback endpoint for Google OAuth.
+
+- `GET /trakt` - Initiates Trakt OAuth.
+- `GET /trakt/callback` - Callback endpoint for Trakt OAuth.
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Google OAuth Integration
-
-This module specifically handles Google OAuth for authentication. Users can authenticate using their Google accounts, and the module will generate the necessary tokens.
 
 ### Example
 
@@ -52,6 +51,12 @@ To authenticate using Google OAuth, follow these steps:
 
 1. Open your browser and go to `http://localhost:3000/google`.
 2. Login with your Google account.
-3. You will be redirected to `http://localhost:3000/callback` with your tokens.
+3. You will be redirected to `http://localhost:3000/google/callback` with your tokens.
+
+To authenticate using Trakt OAuth, follow these steps:
+
+1. Open your browser and go to `http://localhost:3000/trakt`.
+2. Login with your Trakt account.
+3. You will be redirected to `http://localhost:3000/trakt/callback` with your tokens.
 
 These tokens can then be used to authenticate further requests within the SmartClock project.
