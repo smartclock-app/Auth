@@ -40,11 +40,12 @@ Bun.serve({
       });
     }
 
+    // prettier-ignore
     if (pathname === "/google") {
       const redirectUri = `${Bun.env.HOST}/google/callback`;
-      const scope = "https://www.googleapis.com/auth/calendar.readonly";
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${Bun.env.GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline`;
-
+      // Include the scopes you need; SmartClock currently supports Google Calendar
+      const scope = ["https://www.googleapis.com/auth/calendar.readonly"];
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${Bun.env.GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope.join(" ")}&access_type=offline`;
       return Response.redirect(authUrl, 302);
     }
 
@@ -59,6 +60,11 @@ Bun.serve({
       });
 
       const tokens = await client.getToken(code!);
+
+      // @ts-expect-error
+      // Convert date from millisecond timestamp to ISO string for easier input into SmartClock config
+      tokens.tokens.expiry_date = new Date(tokens.tokens.expiry_date).toISOString();
+
       return new Response(JSON.stringify({ tokens: tokens.tokens }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
