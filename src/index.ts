@@ -69,7 +69,32 @@ Bun.serve({
         status: 200,
         headers: { "Content-Type": "application/json" },
       });
-    } else {
+    }
+
+    // prettier-ignore
+    if (pathname === "/google/refresh") {
+      const refreshToken = new URL(request.url).searchParams.get("refresh_token");
+
+      const client = new OAuth2Client({
+        clientId: Bun.env.GOOGLE_CLIENT_ID || "",
+        clientSecret: Bun.env.GOOGLE_CLIENT_SECRET || "",
+        credentials: { refresh_token: refreshToken },
+      });
+
+      const tokens = await client.refreshAccessToken();
+
+      // @ts-expect-error
+      // Convert date from millisecond timestamp to ISO string for easier input into SmartClock config
+      tokens.credentials.expiry_date = new Date(tokens.credentials.expiry_date).toISOString();
+
+      return new Response(JSON.stringify({ tokens: tokens.credentials }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } 
+    
+    // prettier-ignore
+    else {
       return new Response("Not found", { status: 404 });
     }
   },
